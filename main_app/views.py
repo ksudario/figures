@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Figure, Weapon, Activity
+from .models import Figure, Weapon, Activity, Photo
 from .forms import ActivityForm
 import uuid
 import boto3
@@ -10,6 +10,35 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+@login_required
+def add_photo(request, figure_id):
+    # Collect the photo asset from the request
+    photo_file = request.FILES.get('photo-file', None)
+
+    # check if a photo asset was provided
+    if photo_file:
+        # make the s3 utility available locally to this view function
+        s3 = boto3.client('s3')
+        # create a key that will be used to add a unique identifier to our photo asset
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+
+        try:
+            # attempt to upload the file to aws
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            #create the unique photo asset url
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            # create an instance the photo model in memory
+            photo = Photo(url=url, figure_id=figure_id)
+            # save the photo model
+            photo.save()
+
+        except:
+            # something went wrong - gracefully do something else
+            print('An error occurred uploading file to s3')
+    
+    return redirect('detail', figure_id=figure_id)
+
 
 
 def signup(request):

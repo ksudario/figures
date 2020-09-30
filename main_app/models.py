@@ -3,7 +3,11 @@ from django import forms
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
-WEAPONS_KINDS = (("Blade", "BLADE"), ("Spear", "SPEAR"), ("Gauntlet", "GAUNTLET"),)
+WEAPONS_KINDS = (
+    ("Blade", "BLADE"), 
+    ("Spear", "SPEAR"), 
+    ("Gauntlet", "GAUNTLET"),
+)
 
 # Create your models here.
  
@@ -32,8 +36,10 @@ class Figure(models.Model):
 
     def __str__(self):
         return self.name
+
     def get_absolute_url(self):
         return reverse('detail', kwargs={'figure_id': self.id})
+
     def activities_for_figure(self):
         return self.activity_set.filter(figure=self.id)
  
@@ -47,5 +53,12 @@ class Activity(models.Model):
 
     class Meta:
         ordering = ['-date']
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    figure = models.ForeignKey(Figure, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo for figure_id: {self.figure_id} @{self.url}"
 
 
