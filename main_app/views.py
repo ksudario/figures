@@ -11,6 +11,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+BUCKET = 'seir-apparent'
+
 @login_required
 def add_photo(request, figure_id):
     # Collect the photo asset from the request
@@ -77,13 +80,13 @@ def figures_detail(request, figure_id):
 
 class FigureCreate(LoginRequiredMixin, CreateView):
   model = Figure
-  fields = ['name', 'type', 'cost', 'weapons']
+  fields = ['name', 'type', 'cost']
   def form_valid(self, form):
     form.instance.user = self.request.user
     return super().form_valid(form)
 class FigureUpdate(LoginRequiredMixin, UpdateView):
   model = Figure
-  fields = ['name', 'type', 'cost', 'weapons']
+  fields = ['name', 'type', 'cost']
 class FigureDelete(LoginRequiredMixin, DeleteView):
   model = Figure
   success_url ='/figures/'
