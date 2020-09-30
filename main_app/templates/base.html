@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <title>Figure Collector</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-wrapper blue-grey darken-2">
+                <ul>
+                    <li>
+                        <a href="/" class="left brand-logo">&nbsp;&nbsp;Figure Collector</a>
+                    </li>
+                    <li>
+                        {% if user.is_authenticated %}
+                       <h4 class="center brand-logo" >Welcome! {{ request.user }}</h4>
+                       {% endif %}
+                    </li>
+                </ul>
+                <ul class="right">
+                    <li>
+                        <a href="{% url 'about' %}" class="hoverable z-depth blue-grey darken-1">About</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'figures' %}" class="hoverable z-depth blue-grey"> View all my Figures</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'figures_create' %}" class="hoverable z-depth blue-grey">Add a Figure</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'weapons_create' %}" class="hoverable z-depth blue-grey lighten-1">Add a Weapon</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'weapons_index' %}" class="hoverable z-depth blue-grey lighten-1">View All my Weapons</a>    
+                        </li>
+                        <li>
+                            <a href="{% url 'logout' %}">Log Out</a>    
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'login' %}">Log In</a>    
+                        </li>
+                        <li>
+                            <a href="{% url 'signup' %}">Sign Up</a>    
+                        </li>
+                   {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+
+    </main>
+    <footer class="page-footer blue-grey">
+        <div class="center-align ">All Rights Reserved, &copy; 2020 Figure Collector &nbsp;</div>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>View all My Figures</h1>
+
+
+{% for figure in figures %}
+<div class="card">
+    <a href="{% url 'detail' figure.id %}">
+        <div class="card-content">
+            <h3 class="card-title">{{ figure.name}}</h3>
+            <h6>Type: {{figure.tyype}} </h6>
+            <h6>Cost: {{hobby.cost}} </h6>
+        </div> 
+    </a>    
+</div>
+{% endfor %}
+
+{% endblock %}
