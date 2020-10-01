@@ -9,6 +9,12 @@ WEAPONS_KINDS = (
     ("Gauntlet", "GAUNTLET"),
 )
 
+TIME = (
+    ("Morning", "Morning"),
+    ("Afternoon", "Afternoon"),
+    ("Evening", "Evening"),
+)
+
 # Create your models here.
  
 
@@ -40,13 +46,13 @@ class Figure(models.Model):
     def get_absolute_url(self):
         return reverse('detail', kwargs={'figure_id': self.id})
 
-    def activities_for_figure(self):
-        return self.activity_set.filter(figure=self.id)
+    def clean_for_today(self):
+        return self.cleaning_set.filter(date=date.today()).count() >= len(TIME)
  
 
-class Activity(models.Model):
+class Cleaning(models.Model):
     name = models.CharField(max_length=100)
-    date = models.DateField('activity date')
+    date = models.DateField('cleaning date')
     figure = models.ForeignKey(Figure, on_delete=models.CASCADE)
     def __str__(self):
         return self.name

@@ -1,7 +1,7 @@
 from django.forms import ModelForm
-from .models import Activity
+from .models import Cleaning
 
-class ActivityForm(ModelForm):
+class CleaningForm(ModelForm):
     class Meta:
-        model = Activity
+        model = Cleaning
         fields = ['name', 'date']

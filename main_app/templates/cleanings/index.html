@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+  
+{% block content %}
+
+<h1>Cleanings</h1>
+{% for cleaning in cleanings %}
+<div class="card">   
+        <div class="card-content">
+            <span class="card-title">{{ cleaning.name }}</span>
+            <p>When: {{ cleaning.date }}</p>
+            <p>What are we doing: {{ cleaning.figure }}</p>
+         </div>
+         <div class="card-action">
+            <a href="{% url 'cleaning_update' cleaning.id %}">Update</a>
+            <a href="{% url 'cleaning_delete' cleaning.id %}">Delete</a>
+        </div>    
+</div>
+{% endfor %}
+
+{% endblock %}

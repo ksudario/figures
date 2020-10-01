@@ -11,8 +11,8 @@
         <div class="card">
             <div class="card-content">
                 <h3 class="card-title">{{ figure.name}}</h3>
-                <h6>Type: {{figure.tyype}} </h6>
-                <h6>Cost: {{hobby.cost}} </h6>
+                <h6>Type: {{figure.type}} </h6>
+                <h6>Cost: {{figure.cost}} </h6>
             </div>
             <div class="card-action">
                 <a href="{% url 'figures_update' figure.id %}">Update</a>
@@ -20,36 +20,33 @@
             </div>
         </div>
     </div>
-    <div class="col s6">
-        <h3>{{ figure.name }}'s Activities</h3>
-        {% if figure.active %}
-        <form action="{% url 'activities_create' figure.id %}" method="post">
-          {% csrf_token %}
-          {{ activity_form.as_p }}
-          <input type="submit" class="btn" value="Add Activity">
-        </form>
-        {% endif %}
+<div class="col s6">
+    <form action="{% url 'add_cleaning' figure.id %}" method="post">
+        {% csrf_token %}
+        {{ cleaning_form.as_p }}
+        <input type="submit" class="btn" value="Add Cleaning">
+    </form>
         <br>
-        {% if hobby.activity_set.all %}
-        <table class="striped">
-            <thead>
-              <tr><th>Date</th><th>Activity</th></tr>
-            </thead>
-            <tbody>
-              {% for activity in figure.activity_set.all %}
-                <tr>
-                  <td>{{activity.date}}</td>
-                  <td>{{activity.name}}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-         {% else %}
-        <h4>No Activities to show</h4>
+        {% if figure.clean_for_today %}
+          <div class="card-panel teal-text center-align">{{figure.name}} has been cleaned today</div>
+        {% else %}
+          <div class="card-panel red-text center-align">{{figure.name}} might be dusty</div>
         {% endif %}
-    </div>  
-  </div>  
-</div>  
+        <table class="striped">
+          <thead>
+            <tr><th>Date</th><th>Cleaning</th></tr>
+          </thead>
+          <tbody>
+            {% for cleaning in figure.cleaning_set.all %}
+              <tr>
+                <td>{{cleaning.date}}</td>
+                <td>{{cleaning.name}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 <hr>
 <div class="row">
   <div class="col s6">
@@ -63,7 +60,7 @@
             </span>
           </div>
           <div class="card-action">
-            <form action="{% url 'disconnect_weapon' figure.id weapon.id %}" method="post">
+            <form action="{% url 'unassoc_weapon' figure.id weapon.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn">Remove</button>
             </form>
@@ -74,6 +71,29 @@
     {% else %}
         <h5>No Weapons </h5>
     {% endif %} 
+    <div class="col s6">
+        <h3>Available Weapons</h3>
+        {% if weapons.count %}
+          {% for weapon in weapons.all %}
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">
+                  A <span style="name: {{ weapon.name }}">{{ weapon.name }}</span> 
+                </span>
+              </div>
+              <div class="card-action">
+                <form action="{% url 'assoc_weapon' figure.id weapon.id %}" method="post">
+                    {% csrf_token %}
+                  <button type="submit" class="btn">Add</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h5>{{figure.name}} Already Has All Weapons Available</h5>
+        {% endif %}
+      </div>
+    </div>
 
     </div>
     <!-- Insert photo markup below this comment -->
@@ -82,4 +102,26 @@
     {% empty %}
       <div class="card-panel teal-text center-align">No Photos Uploaded</div>
     {% endfor %}
+
+    <form action="{% url 'add_photo' figure.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+        {% csrf_token %}
+        <input type="file" name="photo-file">
+        <br><br>
+        <input type="submit" class="btn" value="Upload Photo">
+    </form>
+
+<script>
+    // create a datepicker
+    var dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+      
+        // initialize the cleaning select
+    var selectEl = document.getElementById('id_time');
+    M.FormSelect.init(selectEl);
+</script>
 {% endblock %}
