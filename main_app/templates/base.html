@@ -19,13 +19,13 @@
                     <li>
                         <a href="/" class="left brand-logo">&nbsp;&nbsp;Figure Collector</a>
                     </li>
-                    <li>
-                        {% if user.is_authenticated %}
-                       <h6 class="center brand-logo" >Welcome! {{ request.user }}</h6>
-                       {% endif %}
-                    </li>
                 </ul>
                 <ul class="right">
+                    <li>
+                        {% if user.is_authenticated %}
+                       Welcome! {{ request.user }}
+                       {% endif %}
+                    </li>
                     <li>
                         <a href="{% url 'about' %}" class="hoverable z-depth rebeccapurple darken-1">About</a>
                     </li>

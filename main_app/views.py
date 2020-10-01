@@ -14,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
 BUCKET = 'figurecollector'
 
+
 @login_required
 def add_photo(request, figure_id):
     # Collect the photo asset from the request
@@ -104,15 +105,6 @@ class FigureDelete(LoginRequiredMixin, DeleteView):
 def weapons_index(request):
     weapons = Weapon.objects.filter(user=request.user)
     return render(request,'weapons/index.html', {'weapons': weapons})
-
-@login_required
-def relate_weapon(request, figure_id, weapon_id):
-  Figure.objects.get(id=figure_id).weapons.add(weapon_id)
-  return redirect('detail', figure_id=figure_id)
-@login_required
-def disconnect_weapon(request, figure_id, weapon_id):
-  Figure.objects.get(id=figure_id).weapons.remove(weapon_id)
-  return redirect('detail', figure_id=figure_id)
 
 class WeaponCreate(LoginRequiredMixin, CreateView):
   model = Weapon

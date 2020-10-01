@@ -40,7 +40,7 @@
             {% for cleaning in figure.cleaning_set.all %}
               <tr>
                 <td>{{cleaning.date}}</td>
-                <td>{{cleaning.name}}</td>
+                <td>{{cleaning.get_time_display}}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -72,7 +72,7 @@
         <h5>No Weapons </h5>
     {% endif %} 
     <div class="col s6">
-        <h3>Available Weapons</h3>
+        <h4>Available Weapons</h4>
         {% if weapons.count %}
           {% for weapon in weapons.all %}
             <div class="card">
@@ -112,7 +112,7 @@
 
 <script>
     // create a datepicker
-    var dateEl = document.getElementById('id_date');
+    const dateEl = document.getElementById('id_date');
     M.Datepicker.init(dateEl, {
         format: 'yyyy-mm-dd',
         defaultDate: new Date(),
@@ -121,7 +121,7 @@
     });
       
         // initialize the cleaning select
-    var selectEl = document.getElementById('id_time');
+    const selectEl = document.getElementById('id_time');
     M.FormSelect.init(selectEl);
 </script>
 {% endblock %}
